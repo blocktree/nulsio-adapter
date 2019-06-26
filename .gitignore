@@ -1,0 +1,8 @@
+*.iml
+*/conf/*
+*/data*
+*/openw_data/*
+.idea/*
+util_test.go
+case_test.go
+api_test.go
