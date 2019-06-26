@@ -1,4 +1,4 @@
-module github.com/blocktree/nulsio
+module github.com/blocktree/nulsio-adapter
 
 require (
 	github.com/asdine/storm v2.1.2+incompatible
