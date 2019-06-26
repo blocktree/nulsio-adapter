@@ -1,4 +1,4 @@
-module github.com/blocktree/nuls
+module github.com/blocktree/nulsio
 
 require (
 	github.com/asdine/storm v2.1.2+incompatible
