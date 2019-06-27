@@ -92,7 +92,7 @@ func (decoder *TransactionDecoder) CreateSimpleRawTransaction(wrapper openwallet
 	}
 
 	if len(unspent) == 0 {
-		return fmt.Errorf("[%s] balance is not enough", accountID)
+		return openwallet.Errorf(openwallet.ErrInsufficientBalanceOfAddress, "[%s] balance is not enough", accountID)
 	}
 
 	if len(rawTx.To) == 0 {
@@ -153,7 +153,7 @@ func (decoder *TransactionDecoder) CreateSimpleRawTransaction(wrapper openwallet
 		}
 
 		if balance.LessThan(computeTotalSend) {
-			return fmt.Errorf("The balance: %s is not enough! ", balance.StringFixed(decoder.wm.Decimal()))
+			return openwallet.Errorf(openwallet.ErrInsufficientBalanceOfAddress, "[%s] balance is not enough", balance.StringFixed(decoder.wm.Decimal()))
 		}
 
 		//计算手续费，找零地址有2个，一个是发送，一个是新创建的
@@ -349,12 +349,16 @@ func (decoder *TransactionDecoder) CreateNrc20RawTransaction(wrapper openwallet.
 	}
 
 	if sendAddressBalance.LessThanOrEqual(decimal.Zero) {
-		return fmt.Errorf("[%s] balance is not enough", rawTx.Coin.Contract.Name)
+
+		return openwallet.Errorf(openwallet.ErrInsufficientBalanceOfAddress, "the [%s] balance: %s is not enough to call smart contract", rawTx.Coin.Symbol, sendAddressBalance)
+
 	}
 
 	if len(unspent) == 0 {
-		return fmt.Errorf("[%s] balance is not enough", accountID)
+		return openwallet.Errorf(openwallet.ErrInsufficientFees, "the [%s] balance: %s is not enough to call smart contract", rawTx.Coin.Symbol)
+
 	}
+
 
 	if changeAmount.LessThan(decimal.Zero) {
 		return fmt.Errorf("[%s] balance is not enough", rawTx.Coin.Contract.Name)
@@ -618,6 +622,8 @@ func (decoder *TransactionDecoder) CreateTokenSummaryRawTransaction(wrapper open
 			}
 		}
 	}
+
+
 
 	if minTransfer.Cmp(retainedBalance) < 0 {
 		return nil, fmt.Errorf("mini transfer amount must be greater than address retained balance")
