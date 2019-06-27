@@ -1,5 +1,6 @@
 module github.com/blocktree/nulsio-adapter
 
+go 1.12
 require (
 	github.com/asdine/storm v2.1.2+incompatible
 	github.com/astaxie/beego v1.11.1

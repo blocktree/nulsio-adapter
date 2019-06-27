@@ -46,8 +46,18 @@ func littleEndianBytesToUint32(data []byte) uint32 {
 //uint48ToLittleEndianBytes
 func uint48ToLittleEndianBytes(data uint64) []byte {
 	tmp := [6]byte{}
-	binary.LittleEndian.PutUint48(tmp[:], data)
+	PutUint48(tmp[:], data)
 	return tmp[:]
+}
+
+func PutUint48(b []byte, v uint64) {
+	_ = b[5] // early bounds check to guarantee safety of writes below
+	b[0] = byte(v)
+	b[1] = byte(v >> 8)
+	b[2] = byte(v >> 16)
+	b[3] = byte(v >> 24)
+	b[4] = byte(v >> 32)
+	b[5] = byte(v >> 40)
 }
 
 //uint16ToLittleEndianBytes
