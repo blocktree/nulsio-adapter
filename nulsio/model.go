@@ -22,6 +22,7 @@ import (
 	"github.com/blocktree/openwallet/common"
 	"github.com/blocktree/openwallet/crypto"
 	"github.com/blocktree/openwallet/openwallet"
+	"github.com/shopspring/decimal"
 )
 
 // Block model
@@ -156,6 +157,12 @@ type Input struct {
 type UnspentSort struct {
 	Values     []*UtxoDto
 	Comparator func(a, b *UtxoDto) int
+}
+
+
+type NulsBalance struct {
+	Balance decimal.Decimal
+	UnLockBalance decimal.Decimal
 }
 
 func (s UnspentSort) Len() int {

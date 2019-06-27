@@ -16,11 +16,11 @@
 package nulsio
 
 import (
+	"errors"
 	"fmt"
 	"github.com/asdine/storm"
 	"github.com/blocktree/openwallet/common"
 	"github.com/blocktree/openwallet/openwallet"
-	"github.com/pkg/errors"
 	"github.com/shopspring/decimal"
 	"path/filepath"
 	"strings"
@@ -1356,18 +1356,22 @@ func (wm *WalletManager) getBalanceCalUnspent(address ...string) ([]*openwallet.
 
 		var obj *openwallet.Balance
 
-		balance, err := wm.Api.GetAddressBalance(a)
-
+		nulsBalance, err := wm.Api.GetAddressBalance(a)
 		if err != nil {
 			return nil, errors.New("cant get balances:" + err.Error())
 		}
+		confirmBalance := nulsBalance.UnLockBalance
+		balance := nulsBalance.Balance
+		unconfirmBalance := nulsBalance.Balance
+
+
 
 		obj = &openwallet.Balance{
 			Symbol:           wm.Symbol(),
 			Address:          a,
 			Balance:          common.IntToDecimals(balance.IntPart(), wm.Decimal()).String(),
-			UnconfirmBalance: common.IntToDecimals(balance.IntPart(), wm.Decimal()).String(),
-			ConfirmBalance:   common.IntToDecimals(balance.IntPart(), wm.Decimal()).String(),
+			UnconfirmBalance: common.IntToDecimals(unconfirmBalance.IntPart(), wm.Decimal()).String(),
+			ConfirmBalance:   common.IntToDecimals(confirmBalance.IntPart(), wm.Decimal()).String(),
 		}
 
 		addrBalanceArr = append(addrBalanceArr, obj)

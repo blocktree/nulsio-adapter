@@ -105,27 +105,33 @@ func (this *Client) GetUnSpent(address string) ([]*UtxoDto, error) {
 
 	return utxoDtoListResult, nil
 }
-func (this *Client) GetAddressBalance(address string) (decimal.Decimal, error) {
+func (this *Client) GetAddressBalance(address string) (*NulsBalance, error) {
 	params := []interface{}{
 		address,
 	}
+	nulsBalance := &NulsBalance{
+		Balance:       decimal.Zero,
+		UnLockBalance: decimal.Zero,
+	}
 	result, err := this.Call("getAccount", 1, params)
-	balance := decimal.Zero
 	if err != nil {
 		//log.Errorf("get block number faield, err = %v \n", err)
-		return balance, nil
+		return nulsBalance, nil
 	}
 
 	if result.Type != gjson.JSON {
 		log.Errorf("result of block number type error")
-		return balance, errors.New("result of block number type error")
+		return nulsBalance, errors.New("result of block number type error")
 	}
 
 	if result.Get("balance").Exists() {
-		balance = decimal.New(result.Get("balance").Int(), 0)
+		nulsBalance.UnLockBalance = decimal.New(result.Get("balance").Int(), 0)
+	}
+	if result.Get("totalBalance").Exists() {
+		nulsBalance.Balance = decimal.New(result.Get("totalBalance").Int(), 0)
 	}
 
-	return balance, nil
+	return nulsBalance, nil
 }
 
 //获取最新高度
