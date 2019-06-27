@@ -1,7 +1,7 @@
 package openwtester
 
 import (
-	"github.com/blocktree/nuls/nulsio"
+	"github.com/blocktree/nulsio-adapter/nulsio"
 	"github.com/blocktree/openwallet/log"
 	"github.com/blocktree/openwallet/openw"
 )

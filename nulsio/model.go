@@ -18,7 +18,7 @@ package nulsio
 import (
 	"encoding/hex"
 	"fmt"
-	"github.com/blocktree/nuls/nulsio_addrdec"
+	"github.com/blocktree/nulsio-adapter/nulsio_addrdec"
 	"github.com/blocktree/openwallet/common"
 	"github.com/blocktree/openwallet/crypto"
 	"github.com/blocktree/openwallet/openwallet"

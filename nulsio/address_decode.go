@@ -17,7 +17,7 @@ package nulsio
 
 import (
 	"fmt"
-	"github.com/blocktree/nuls/nulsio_addrdec"
+	"github.com/blocktree/nulsio-adapter/nulsio_addrdec"
 	"github.com/pkg/errors"
 )
 

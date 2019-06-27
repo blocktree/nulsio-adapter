@@ -1,6 +1,6 @@
 package nulsio_trans
 
-import "github.com/blocktree/nuls/nulsio_addrdec"
+import "github.com/blocktree/nulsio-adapter/nulsio_addrdec"
 
 type TxToken struct {
 	Sender          string
