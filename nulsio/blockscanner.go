@@ -773,7 +773,7 @@ func (bs *NULSBlockScanner) extractTxOutput(trx *Tx, blockHash string, result *E
 	for n, output := range vout {
 
 		if output.LockTime > trx.BlockHeight{
-			bs.wm.Log.Error("nuls lockTime over Than now,err:")
+			bs.wm.Log.Error("nuls lockTime over Than now,height:",trx.BlockHeight)
 			continue
 		}
 
@@ -842,7 +842,7 @@ func (bs *NULSBlockScanner) extractTokenTxOutput(nulsTokens []*NulsToken, blockH
 	for i, tokenIn := range nulsTokens {
 
 
-		
+
 		txid := tokenIn.Hash
 		amount, err := decimal.NewFromString(tokenIn.Value)
 		if err != nil {
