@@ -772,6 +772,11 @@ func (bs *NULSBlockScanner) extractTxOutput(trx *Tx, blockHash string, result *E
 	createAt := time.Now().Unix()
 	for n, output := range vout {
 
+		if output.LockTime > trx.BlockHeight{
+			bs.wm.Log.Error("nuls lockTime over Than now,err:")
+			continue
+		}
+
 		amount := common.IntToDecimals(int64(output.Value), bs.wm.Decimal()).String()
 		addr := output.Address
 		sourceKey, ok := scanAddressFunc(addr)
@@ -836,6 +841,8 @@ func (bs *NULSBlockScanner) extractTokenTxOutput(nulsTokens []*NulsToken, blockH
 	createAt := time.Now().Unix()
 	for i, tokenIn := range nulsTokens {
 
+
+		
 		txid := tokenIn.Hash
 		amount, err := decimal.NewFromString(tokenIn.Value)
 		if err != nil {
