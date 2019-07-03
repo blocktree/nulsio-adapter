@@ -19,7 +19,7 @@ type TransactionSigner struct {
 func (singer *TransactionSigner) SignTransactionHash(msg []byte, prikey []byte, eccType uint32) ([]byte, error) {
 	msg = nulsio_trans.Sha256Twice(msg) //sha256
 
-	signature, retCode := owcrypt.Signature(prikey, nil, 0, data, 32, owcrypt.ECC_CURVE_SECP256K1)
+	signature, retCode := owcrypt.Signature(prikey, nil, 0, msg, 32, owcrypt.ECC_CURVE_SECP256K1)
 	if retCode != owcrypt.SUCCESS {
 		return nil, errors.New("Failed to sign message!")
 	}
