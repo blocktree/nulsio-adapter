@@ -4,7 +4,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/blocktree/go-owcrypt"
 )
 
@@ -94,7 +93,6 @@ func SignTransactionMessage(message string, prikey []byte) ([]byte, error) {
 		signature,
 	}
 
-	fmt.Println(hex.EncodeToString(sigPub.ToBytes()))
 
 	result := make([]byte, 0)
 	result = append(result, byte(len(pub)))

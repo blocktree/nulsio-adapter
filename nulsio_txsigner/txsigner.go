@@ -1,9 +1,7 @@
 package nulsio_txsigner
 
 import (
-	"encoding/hex"
 	"errors"
-	"fmt"
 	"github.com/blocktree/go-owcrypt"
 	"github.com/blocktree/nulsio-adapter/nulsio_trans"
 )
@@ -35,7 +33,6 @@ func (singer *TransactionSigner) SignTransactionHash(msg []byte, prikey []byte, 
 		signature,
 	}
 
-	fmt.Println(hex.EncodeToString(sigPub.ToBytes()))
 
 	result := make([]byte, 0)
 	result = append(result, byte(len(pub)))
