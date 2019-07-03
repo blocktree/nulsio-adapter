@@ -130,7 +130,7 @@ func TestTransfer(t *testing.T) {
 	tm := testInitWalletManager()
 	walletID := "VzLUoGiZioDZDyisPtKFMD7Sfy485Qih2N"
 	accountID := "HhMp9EJwZpNFhfUuSSXanocxgPGz9eLoSbPbqawcWtWU"
-	to := "Nse1BC7HwSNf69BrcqGpw69ZvQTRJ9e6"
+	to := "NsdvAokV31ZxHBJnwbxQeug91BJdScMs"
 
 	//accountID := "4h4wnCmpzgy3ZTeoMHs3gjDCuWyXQcxDsk9dcwbNGhmR"
 	//to := "fiiimYt7qZekpQKZauBGxv8kGFJGdMyYtzSgdP"
@@ -140,7 +140,7 @@ func TestTransfer(t *testing.T) {
 
 
 
-	rawTx, err := testCreateTransactionStep(tm, walletID, accountID, to, "3", "", nil)
+	rawTx, err := testCreateTransactionStep(tm, walletID, accountID, to, "0.5", "", nil)
 	if err != nil {
 		return
 	}
@@ -173,11 +173,11 @@ func TestTransferNrc20(t *testing.T) {
 	//fiiimS8BWk1oKnDr1LJn5EpXbSVijKrHVHRybE
 
 	address := []string{
-		"Nse3gNpZGTdVjnqkUoamG6GuRh1RMbP4",
-		"Nse6tSvVHwBPTm3XfY9x37HRLjb9oq8h",
-		"NsdvAokV31ZxHBJnwbxQeug91BJdScMs",
-		"Nse5WHdQnRC3dd87BnAjGEWyjj3yWzx2",
-		"NsdwWYFeyCiWi8gaK6igqJurjoY9TCqo",
+		"Nse1BC7HwSNf69BrcqGpw69ZvQTRJ9e6",
+		//"Nse6tSvVHwBPTm3XfY9x37HRLjb9oq8h",
+		//"NsdvAokV31ZxHBJnwbxQeug91BJdScMs",
+		//"Nse5WHdQnRC3dd87BnAjGEWyjj3yWzx2",
+		//"NsdwWYFeyCiWi8gaK6igqJurjoY9TCqo",
 	}
 
 
