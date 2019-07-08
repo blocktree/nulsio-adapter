@@ -22,6 +22,7 @@ import (
 	"github.com/blocktree/openwallet/openwallet"
 	"path/filepath"
 	"testing"
+	"time"
 )
 
 ////////////////////////// 测试单个扫描器 //////////////////////////
@@ -50,15 +51,15 @@ func (sub *subscriberSingle) BlockExtractDataNotify(sourceKey string, data *open
 
 	log.Std.Notice("data.Transaction: %+v", data.Transaction)
 
-	walletID := "VzLUoGiZioDZDyisPtKFMD7Sfy485Qih2N"
-	accountID := "CKuFVVn7f1PphMVoL2tQcLksqjthHUUZK4MPW3cTZcF3"
-
-	balance, err := sub.manager.GetAssetsAccountBalance(testApp, walletID, accountID)
-	if err != nil {
-		log.Error("GetAssetsAccountBalance failed, unexpected error:", err)
-		return nil
-	}
-	log.Notice("account balance:", balance)
+	//walletID := "VzLUoGiZioDZDyisPtKFMD7Sfy485Qih2N"
+	//accountID := "CKuFVVn7f1PphMVoL2tQcLksqjthHUUZK4MPW3cTZcF3"
+	//
+	//balance, err := sub.manager.GetAssetsAccountBalance(testApp, walletID, accountID)
+	//if err != nil {
+	//	log.Error("GetAssetsAccountBalance failed, unexpected error:", err)
+	//	return nil
+	//}
+	//log.Notice("account balance:", balance)
 
 	return nil
 }
@@ -70,7 +71,8 @@ func TestSubscribeAddress(t *testing.T) {
 		endRunning = make(chan bool, 1)
 		symbol     = "NULS"
 		addrs      = map[string]string{
-			"NsdunqqvoSYMne6XxTckQrqYfJZJfnwy": "sender",
+			"Nse1BC7HwSNf69BrcqGpw69ZvQTRJ9e6": "sender",
+			"Nse98BmLUUJQyVUmUujxYk4fG91xPK61":"receiver",
 		}
 	)
 
@@ -105,7 +107,7 @@ func TestSubscribeAddress(t *testing.T) {
 
 	//log.Debug("already got scanner:", assetsMgr)
 	scanner := assetsMgr.GetBlockScanner()
-	scanner.SetRescanBlockHeight(3012771)
+	scanner.SetRescanBlockHeight(3020297)
 
 	if scanner == nil {
 		log.Error(symbol, "is not support block scan")
@@ -128,7 +130,8 @@ func TestSubscribeScanBlock(t *testing.T) {
 	var (
 		symbol     = "NULS"
 		addrs      = map[string]string{
-			"fiiimUwLmiZ5gwyVZvam1eeSbweNz2vaVP6GtB": "sender",
+			"Nse1BC7HwSNf69BrcqGpw69ZvQTRJ9e6": "sender",
+			"Nse98BmLUUJQyVUmUujxYk4fG91xPK61":"receiver",
 		}
 	)
 
@@ -173,5 +176,7 @@ func TestSubscribeScanBlock(t *testing.T) {
 	sub := subscriberSingle{}
 	scanner.AddObserver(&sub)
 
-	scanner.ScanBlock(46044)
+	scanner.ScanBlock(3020297)
+
+	time.Sleep(5*time.Second)
 }

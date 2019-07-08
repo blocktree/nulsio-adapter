@@ -363,9 +363,9 @@ func (bs *NULSBlockScanner) BatchExtractTransaction(blockHeight uint64, blockHas
 
 	var (
 		quit       = make(chan struct{})
-		done       = 0 //完成标记
+		//done       = 0 //完成标记
 		failed     = 0
-		shouldDone = len(txs) //需要完成的总数
+		//shouldDone = len(txs) //需要完成的总数
 	)
 
 	if len(txs) == 0 {
@@ -402,28 +402,28 @@ func (bs *NULSBlockScanner) BatchExtractTransaction(blockHeight uint64, blockHas
 				failed++ //标记保存失败数
 			}
 			//累计完成的线程数
-			done++
-			if done == shouldDone {
+			//done++
+			//if done == shouldDone {
 				//bs.wm.Log.Std.Info("done = %d, shouldDone = %d ", done, len(txs))
 				close(quit) //关闭通道，等于给通道传入nil
-			}
+			//}
 		}
 	}
 
 	//提取工作
 	extractWork := func(eblockHeight uint64, eBlockHash string, mTxs []*Tx, eProducer chan ExtractResult) {
-		for _, tx := range mTxs {
-			bs.extractingCH <- struct{}{}
-			//shouldDone++
-			go func(mBlockHeight uint64, mTxid string, end chan struct{}, mProducer chan<- ExtractResult) {
+		//for _, tx := range mTxs {
+		bs.extractingCH <- struct{}{}
+		//shouldDone++
+		go func(mBlockHeight uint64, mTxid string, end chan struct{}, mProducer chan<- ExtractResult) {
 
-				//导出提出的交易
-				mProducer <- bs.ExtractTransaction(mBlockHeight, eBlockHash, tx, bs.ScanAddressFunc)
-				//释放
-				<-end
+			//导出提出的交易
+			eProducer <- bs.ExtractTransaction(mBlockHeight, eBlockHash, mTxs, bs.ScanAddressFunc)
+			//释放
+			<-end
 
-			}(eblockHeight, eBlockHash, bs.extractingCH, eProducer)
-		}
+		}(eblockHeight, eBlockHash, bs.extractingCH, eProducer)
+		//}
 	}
 
 	/*	开启导出的线程	*/
@@ -483,23 +483,25 @@ func (bs *NULSBlockScanner) extractRuntime(producer chan ExtractResult, worker c
 }
 
 //ExtractTransaction 提取交易单
-func (bs *NULSBlockScanner) ExtractTransaction(blockHeight uint64, blockHash string, tx *Tx, scanAddressFunc openwallet.BlockScanAddressFunc) ExtractResult {
+func (bs *NULSBlockScanner) ExtractTransaction(blockHeight uint64, blockHash string, txs []*Tx, scanAddressFunc openwallet.BlockScanAddressFunc) ExtractResult {
 
 	var (
 		result = ExtractResult{
 			BlockHeight: blockHeight,
-			TxID:        tx.Hash,
 			extractData: make(map[string]*openwallet.TxExtractData),
 		}
 	)
 
-	//优先使用传入的高度
-	if blockHeight > 0 && tx.BlockHeight == 0 {
-		tx.BlockHeight = int64(blockHeight)
-	}
+	////优先使用传入的高度
+	//if blockHeight > 0 && tx.BlockHeight == 0 {
+	//	tx.BlockHeight = int64(blockHeight)
+	//}
 
 	//bs.wm.Log.Debug("start extractTransaction")
-	bs.extractTransaction(tx, blockHash, &result, scanAddressFunc)
+
+	for _, tx := range txs {
+		bs.extractTransaction(tx, blockHash, &result, scanAddressFunc)
+	}
 	//bs.wm.Log.Debug("end extractTransaction")
 
 	return result
@@ -772,8 +774,8 @@ func (bs *NULSBlockScanner) extractTxOutput(trx *Tx, blockHash string, result *E
 	createAt := time.Now().Unix()
 	for n, output := range vout {
 
-		if output.LockTime > trx.BlockHeight{
-			bs.wm.Log.Error("nuls lockTime over Than now,height:",trx.BlockHeight)
+		if output.LockTime > trx.BlockHeight {
+			bs.wm.Log.Error("nuls lockTime over Than now,height:", trx.BlockHeight)
 			continue
 		}
 
@@ -840,8 +842,6 @@ func (bs *NULSBlockScanner) extractTokenTxOutput(nulsTokens []*NulsToken, blockH
 
 	createAt := time.Now().Unix()
 	for i, tokenIn := range nulsTokens {
-
-
 
 		txid := tokenIn.Hash
 		amount, err := decimal.NewFromString(tokenIn.Value)
@@ -1085,7 +1085,10 @@ func (bs *NULSBlockScanner) ExtractTransactionData(txid string, scanTargetFunc o
 	if err != nil {
 		return nil, fmt.Errorf("can't find the txid,err:" + err.Error())
 	}
-	result := bs.ExtractTransaction(0, "", tx, scanAddressFunc)
+
+	txs := make([]*Tx,0)
+	txs = append(txs, tx)
+	result := bs.ExtractTransaction(0, "", txs, scanAddressFunc)
 	if !result.Success {
 		return nil, fmt.Errorf("extract transaction failed")
 	}
@@ -1370,8 +1373,6 @@ func (wm *WalletManager) getBalanceCalUnspent(address ...string) ([]*openwallet.
 		confirmBalance := nulsBalance.UnLockBalance
 		balance := nulsBalance.Balance
 		unconfirmBalance := nulsBalance.Balance
-
-
 
 		obj = &openwallet.Balance{
 			Symbol:           wm.Symbol(),
