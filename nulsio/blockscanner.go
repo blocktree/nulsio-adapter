@@ -582,7 +582,7 @@ func (bs *NULSBlockScanner) extractTransaction(trx *Tx, blockHash string, result
 						Fees: totalSpent.Sub(totalReceived).StringFixed(8),
 						Coin: openwallet.Coin{
 							Symbol:     bs.wm.Symbol(),
-							IsContract: false,
+							IsContract: true,
 							ContractID: contractId,
 							Contract: openwallet.SmartContract{
 								Address:    tokenIn.ContractAddress,

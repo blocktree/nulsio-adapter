@@ -130,8 +130,8 @@ func TestSubscribeScanBlock(t *testing.T) {
 	var (
 		symbol     = "NULS"
 		addrs      = map[string]string{
-			"Nse1BC7HwSNf69BrcqGpw69ZvQTRJ9e6": "sender",
-			"Nse98BmLUUJQyVUmUujxYk4fG91xPK61":"receiver",
+			//"Nsdzhw5UzcewtbpweAwXvU7MngCmdNag": "sender",
+			"Nse29YuvPdmSy3ZTa9D2CWatqAPXnY4G":"receiver",
 		}
 	)
 
@@ -176,7 +176,7 @@ func TestSubscribeScanBlock(t *testing.T) {
 	sub := subscriberSingle{}
 	scanner.AddObserver(&sub)
 
-	scanner.ScanBlock(3020297)
+	scanner.ScanBlock(3116331)
 
 	time.Sleep(5*time.Second)
 }
