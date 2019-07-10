@@ -705,7 +705,7 @@ func (bs *NULSBlockScanner) extractTokenTxInput(nulsTokens []*NulsToken, blockHa
 			bs.wm.Log.Error("nulsTokens value can't be int,err:", err.Error())
 			continue
 		}
-		amount = amount.Shift(int32(-uint64(tokenIn.Decimals)))
+		//amount = amount.Shift(int32(-uint64(tokenIn.Decimals)))
 		addr := tokenIn.From
 		sourceKey, ok := scanAddressFunc(addr)
 		if ok {
@@ -849,7 +849,7 @@ func (bs *NULSBlockScanner) extractTokenTxOutput(nulsTokens []*NulsToken, blockH
 			bs.wm.Log.Error("nulsTokens value can't be int,err:", err.Error())
 			continue
 		}
-		amount = amount.Shift(int32(-uint64(tokenIn.Decimals)))
+		//amount = amount.Shift(int32(-uint64(tokenIn.Decimals)))
 		addr := tokenIn.To
 		sourceKey, ok := scanAddressFunc(addr)
 		if ok {
