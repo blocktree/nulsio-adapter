@@ -129,7 +129,9 @@ func (this *NulsContractDecoder) GetTokenBalanceByAddress(contract openwallet.Sm
 			log.Errorf("get address[%v] nrc20 token balance failed, err=%v",address, err)
 			return
 		}
-	
+
+		balanceTemp.Shift(int32(-contract.Decimals))
+
 
 		balance = &openwallet.TokenBalance{
 			Contract: &contract,

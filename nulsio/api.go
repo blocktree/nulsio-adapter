@@ -181,12 +181,7 @@ func (this *Client) GetTokenBalances(contractAddress, address string) (decimal.D
 		return balance, errors.New("token balanceStr is zero:" + err.Error())
 	}
 
-	if tokenBalance.Decimals != 0 {
-		balance = balanceStr.Shift(int32(-tokenBalance.Decimals))
-
-	} else {
-		balance = balanceStr
-	}
+	balance = balanceStr
 
 	return balance, nil
 }
