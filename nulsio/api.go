@@ -181,9 +181,50 @@ func (this *Client) GetTokenBalances(contractAddress, address string) (decimal.D
 		return balance, errors.New("token balanceStr is zero:" + err.Error())
 	}
 
-	balance = balanceStr
+	if tokenBalance.Decimals != 0 {
+		balance = balanceStr.Shift(int32(-tokenBalance.Decimals))
+
+	} else {
+		balance = balanceStr
+	}
 
 	return balance, nil
+}
+
+
+//获取最新高度
+func (this *Client) GetTokenBalancesReal(contractAddress, address string) (decimal.Decimal, error) {
+	balance := decimal.Zero
+	target := "/api/contract/balance/token/" + contractAddress + "/" + address
+	result, err := this.CallReq(target)
+	if err != nil {
+		log.Errorf("get GetNewHeight faield, err = %v \n", err)
+		return balance, err
+	}
+
+	if result.Type != gjson.JSON {
+		log.Errorf("result of GetNewHeight type error")
+		return balance, errors.New("result of GetNewBlock type error")
+	}
+
+	var tokenBalance *TokenBalance
+	err = json.Unmarshal([]byte(result.Raw), &tokenBalance)
+	if err != nil {
+		log.Errorf("GetBalance decode json [%v] failed, err=%v", []byte(result.Raw), err)
+		return balance, err
+	}
+
+	if tokenBalance == nil {
+		return balance, errors.New("token balances is zero.")
+	}
+
+	balanceStr, err := decimal.NewFromString(tokenBalance.Amount)
+	if err != nil {
+		return balance, errors.New("token balanceStr is zero:" + err.Error())
+	}
+
+
+	return balanceStr, nil
 }
 
 //获取最新高度区块信息

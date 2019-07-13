@@ -42,6 +42,7 @@ type NULSBlockScanner struct {
 	wm                   *WalletManager //钱包管理者
 	IsScanMemPool        bool           //是否扫描交易池
 	RescanLastBlockCount uint64         //重扫上N个区块数量
+
 }
 
 //ExtractResult 扫描完成的提取结果
@@ -68,7 +69,7 @@ func NewNULSBlockScanner(wm *WalletManager) *NULSBlockScanner {
 	bs.extractingCH = make(chan struct{}, maxExtractingSize)
 	bs.wm = wm
 	bs.IsScanMemPool = false
-	bs.RescanLastBlockCount = 1
+	bs.RescanLastBlockCount = 5
 
 	//设置扫描任务
 	bs.SetTask(bs.ScanBlockTask)

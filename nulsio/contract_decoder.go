@@ -124,7 +124,7 @@ func (this *NulsContractDecoder) GetTokenBalanceByAddress(contract openwallet.Sm
 			<-threadControl
 		}()
 
-		balanceTemp, err := this.wm.Api.GetTokenBalances(contract.Address,address)
+		balanceTemp, err := this.wm.Api.GetTokenBalancesReal(contract.Address,address)
 		if err != nil {
 			log.Errorf("get address[%v] nrc20 token balance failed, err=%v",address, err)
 			return
