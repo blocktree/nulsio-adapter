@@ -307,6 +307,8 @@ func TestTokenSummary(t *testing.T) {
 				continue
 			}
 
+
+			
 			_, err = testSignTransactionStep(tm, rawTxWithErr.RawTx)
 			if err != nil {
 				return
