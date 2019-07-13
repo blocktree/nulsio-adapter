@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-//var tm = testInitWalletManager()
+var tm = testInitWalletManager()
 
 
 ////////////////////////// 测试单个扫描器 //////////////////////////
@@ -60,15 +60,21 @@ func (sub *subscriberSingle) BlockExtractDataNotify(sourceKey string, data *open
 	//accountID := "HhMp9EJwZpNFhfUuSSXanocxgPGz9eLoSbPbqawcWtWU"
 
 	//testGetAssetsAccountBalance(tm, walletID, accountID)
-	//walletID := "VzLUoGiZioDZDyisPtKFMD7Sfy485Qih2N"
-	//accountID := "CKuFVVn7f1PphMVoL2tQcLksqjthHUUZK4MPW3cTZcF3"
-	//
+	walletID := "VzLUoGiZioDZDyisPtKFMD7Sfy485Qih2N"
+	accountID := "CbhEiN6Pm3ZjJDCkwybanzs192Mo32jhph2RY4ZLMAFN"
+
+	contract := openwallet.SmartContract{
+		Address:"NseCpCRzVU3U9RSYyTwSFhdL71wEnpDv",
+		Decimals:8,
+		Name:"angel",
+	}
+	balance, err := tm.GetAssetsAccountTokenBalance(testApp,walletID, accountID, contract)
 	//balance, err := sub.manager.GetAssetsAccountBalance(testApp, walletID, accountID)
-	//if err != nil {
-	//	log.Error("GetAssetsAccountBalance failed, unexpected error:", err)
-	//	return nil
-	//}
-	//log.Notice("account balance:", balance)
+	if err != nil {
+		log.Error("GetAssetsAccountBalance failed, unexpected error:", err)
+		return nil
+	}
+	log.Notice("account balance:", balance.Balance.Balance)
 
 	return nil
 }
@@ -85,7 +91,12 @@ func TestSubscribeAddress(t *testing.T) {
 		}
 	)
 
-	tm := testInitWalletManager()
+	//tm := testInitWalletManager()
+
+	go func() {
+		time.Sleep(10 * time.Second)
+		TestTransferNrc20(t)
+	}()
 
 	//GetSourceKeyByAddress 获取地址对应的数据源标识
 	scanAddressFunc := func(address string) (string, bool) {
@@ -118,7 +129,7 @@ func TestSubscribeAddress(t *testing.T) {
 
 	//log.Debug("already got scanner:", assetsMgr)
 	scanner := assetsMgr.GetBlockScanner()
-	scanner.SetRescanBlockHeight(3149373)
+	scanner.SetRescanBlockHeight(3150267)
 
 	if scanner == nil {
 		log.Error(symbol, "is not support block scan")
@@ -132,11 +143,6 @@ func TestSubscribeAddress(t *testing.T) {
 
 	scanner.Run()
 
-	go func() {
-		time.Sleep(10 *time.Second)
-		TestTransferNrc20(t)
-
-	}()
 
 	<-endRunning
 }

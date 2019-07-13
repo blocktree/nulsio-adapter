@@ -181,7 +181,7 @@ func TestTransferNrc20(t *testing.T) {
 	}
 
 
-	tm := testInitWalletManager()
+	//tm := testInitWalletManager()
 	walletID := "VzLUoGiZioDZDyisPtKFMD7Sfy485Qih2N"
 	//accountID := "CbhEiN6Pm3ZjJDCkwybanzs192Mo32jhph2RY4ZLMAFN"
 	accountID := "HhMp9EJwZpNFhfUuSSXanocxgPGz9eLoSbPbqawcWtWU"
@@ -308,7 +308,7 @@ func TestTokenSummary(t *testing.T) {
 			}
 
 
-			
+
 			_, err = testSignTransactionStep(tm, rawTxWithErr.RawTx)
 			if err != nil {
 				return
