@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var tm = testInitWalletManager()
+//var tm = testInitWalletManager()
 
 
 ////////////////////////// 测试单个扫描器 //////////////////////////
@@ -55,7 +55,7 @@ func (sub *subscriberSingle) BlockExtractDataNotify(sourceKey string, data *open
 	log.Std.Notice("data.Transaction: %+v", data.Transaction)
 
 
-	//tm := testInitWalletManager()
+	tm := testInitWalletManager()
 	//walletID := "VzLUoGiZioDZDyisPtKFMD7Sfy485Qih2N"
 	//accountID := "HhMp9EJwZpNFhfUuSSXanocxgPGz9eLoSbPbqawcWtWU"
 
@@ -91,7 +91,7 @@ func TestSubscribeAddress(t *testing.T) {
 		}
 	)
 
-	//tm := testInitWalletManager()
+	tm := testInitWalletManager()
 
 	go func() {
 		time.Sleep(10 * time.Second)
@@ -129,7 +129,7 @@ func TestSubscribeAddress(t *testing.T) {
 
 	//log.Debug("already got scanner:", assetsMgr)
 	scanner := assetsMgr.GetBlockScanner()
-	scanner.SetRescanBlockHeight(3150267)
+	scanner.SetRescanBlockHeight(3150529)
 
 	if scanner == nil {
 		log.Error(symbol, "is not support block scan")

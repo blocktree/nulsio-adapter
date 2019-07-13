@@ -156,12 +156,12 @@ func (this *Client) GetTokenBalances(contractAddress, address string) (decimal.D
 	target := "/api/contract/balance/token/" + contractAddress + "/" + address
 	result, err := this.CallReq(target)
 	if err != nil {
-		log.Errorf("get GetNewHeight faield, err = %v \n", err)
+		log.Errorf("get GetTokenBalances faield, err = %v \n", err)
 		return balance, err
 	}
 
 	if result.Type != gjson.JSON {
-		log.Errorf("result of GetNewHeight type error")
+		log.Errorf("result of GetTokenBalances type error")
 		return balance, errors.New("result of GetNewBlock type error")
 	}
 
@@ -198,12 +198,12 @@ func (this *Client) GetTokenBalancesReal(contractAddress, address string) (decim
 	target := "/api/contract/balance/token/" + contractAddress + "/" + address
 	result, err := this.CallReq(target)
 	if err != nil {
-		log.Errorf("get GetNewHeight faield, err = %v \n", err)
+		log.Errorf("get GetTokenBalancesReal faield, err = %v \n", err)
 		return balance, err
 	}
 
 	if result.Type != gjson.JSON {
-		log.Errorf("result of GetNewHeight type error")
+		log.Errorf("result of GetTokenBalancesReal type error")
 		return balance, errors.New("result of GetNewBlock type error")
 	}
 

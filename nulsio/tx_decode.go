@@ -656,7 +656,7 @@ func (decoder *TransactionDecoder) CreateTokenSummaryRawTransaction(wrapper open
 		//trcBalance := big.NewInt(0)
 
 		//检查余额是否超过最低转账
-		addrBalance_BI := common.StringNumToBigIntWithExp(addrBalance.Balance.Balance, 0)
+		addrBalance_BI := common.StringNumToBigIntWithExp(addrBalance.Balance.Balance, tokenDecimals)
 
 		if addrBalance_BI.Cmp(minTransfer) < 0 || addrBalance_BI.Cmp(big.NewInt(0)) <= 0 {
 			continue
