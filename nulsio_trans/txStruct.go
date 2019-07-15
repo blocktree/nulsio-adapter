@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"github.com/blocktree/go-owcrypt"
+	"time"
 )
 
 const (
@@ -72,7 +73,7 @@ func (t Transaction) encodeToBytes() ([]byte, error) {
 		txType = uint16ToLittleEndianBytes(101)
 	}
 	ret = append(ret, txType...)
-	now := 1560961010060
+	now := time.Now().Unix()*1000
 	nowByte := uint48ToLittleEndianBytes(uint64(now))
 	ret = append(ret, nowByte...)
 	if t.Remark == nil {

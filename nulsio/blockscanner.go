@@ -578,6 +578,7 @@ func (bs *NULSBlockScanner) extractTransaction(trx *Tx, blockHash string, result
 					tokenIn := tokenTrans[0]
 					contractId := openwallet.GenContractID(bs.wm.Symbol(), tokenIn.ContractAddress)
 					tx := &openwallet.Transaction{
+
 						From: from,
 						To:   to,
 						Fees: totalSpent.Sub(totalReceived).StringFixed(8),
