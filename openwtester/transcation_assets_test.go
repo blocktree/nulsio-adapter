@@ -186,15 +186,15 @@ func TestTransferNrc20(t *testing.T) {
 		//"NsdxsEBWdHBUiqtPoWVW5CbKkood5fpN",
 
 		"Nse6cbCoZenQo7wwEFjs3th9MgNXcs2A",
-		//"Nse2aof9WeCoNiR86JfMfMCUmwc7vVQr",
-		//"Nse5A6LQwwJiioY6VQa9znMsc7eAzdnj",
-		//"Nse7HNez8z8zcQ98yCCL9PYKm5NGqxxg",
-		//"Nsdy2uqQLRoiTx1x2jRYEqxhtFu6CRkn",
-		//"NsdxePUrgcKstvbwyfi8oDmrmWDTiM1L",
-		//"Nse7fHdcBPcey6gFyWjhMKfZYLEAmAEj",
-		//"Nsdx573EYsEXRiwXXagTJdEbuFz9o1vg",
-		//"NsdybWu4R8TX46NEYwEfGoVwvf6tn5RM",
-		//"Nse8SXiKiiEXiYdJ1dmAKJaAyS1TMwEV",
+		"Nse2aof9WeCoNiR86JfMfMCUmwc7vVQr",
+		"Nse5A6LQwwJiioY6VQa9znMsc7eAzdnj",
+		"Nse7HNez8z8zcQ98yCCL9PYKm5NGqxxg",
+		"Nsdy2uqQLRoiTx1x2jRYEqxhtFu6CRkn",
+		"NsdxePUrgcKstvbwyfi8oDmrmWDTiM1L",
+		"Nse7fHdcBPcey6gFyWjhMKfZYLEAmAEj",
+		"Nsdx573EYsEXRiwXXagTJdEbuFz9o1vg",
+		"NsdybWu4R8TX46NEYwEfGoVwvf6tn5RM",
+		"Nse8SXiKiiEXiYdJ1dmAKJaAyS1TMwEV",
 
 
 

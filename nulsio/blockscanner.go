@@ -42,7 +42,6 @@ type NULSBlockScanner struct {
 	wm                   *WalletManager //钱包管理者
 	IsScanMemPool        bool           //是否扫描交易池
 	RescanLastBlockCount uint64         //重扫上N个区块数量
-
 }
 
 //ExtractResult 扫描完成的提取结果
@@ -363,10 +362,10 @@ func (bs *NULSBlockScanner) newBlockNotify(block *NusBlock, isFork bool) {
 func (bs *NULSBlockScanner) BatchExtractTransaction(blockHeight uint64, blockHash string, txs []*Tx) error {
 
 	var (
-		quit       = make(chan struct{})
-		//done       = 0 //完成标记
-		failed     = 0
-		//shouldDone = len(txs) //需要完成的总数
+		quit = make(chan struct{})
+		done       = 0 //完成标记
+		failed = 0
+		shouldDone = len(txs) //需要完成的总数
 	)
 
 	if len(txs) == 0 {
@@ -403,28 +402,28 @@ func (bs *NULSBlockScanner) BatchExtractTransaction(blockHeight uint64, blockHas
 				failed++ //标记保存失败数
 			}
 			//累计完成的线程数
-			//done++
-			//if done == shouldDone {
-				//bs.wm.Log.Std.Info("done = %d, shouldDone = %d ", done, len(txs))
-				close(quit) //关闭通道，等于给通道传入nil
-			//}
+			done++
+			if done == shouldDone {
+			bs.wm.Log.Std.Info("done = %d, shouldDone = %d ", done, len(txs))
+			close(quit) //关闭通道，等于给通道传入nil
+			}
 		}
 	}
 
 	//提取工作
 	extractWork := func(eblockHeight uint64, eBlockHash string, mTxs []*Tx, eProducer chan ExtractResult) {
-		//for _, tx := range mTxs {
-		bs.extractingCH <- struct{}{}
-		//shouldDone++
-		go func(mBlockHeight uint64, mTxid string, end chan struct{}, mProducer chan<- ExtractResult) {
+		for _, tx := range mTxs {
+			bs.extractingCH <- struct{}{}
+			shouldDone++
+			go func(mBlockHeight uint64, blockhash string,tx *Tx, end chan struct{}, mProducer chan<- ExtractResult) {
 
-			//导出提出的交易
-			eProducer <- bs.ExtractTransaction(mBlockHeight, eBlockHash, mTxs, bs.ScanAddressFunc)
-			//释放
-			<-end
+				//导出提出的交易
+				eProducer <- bs.ExtractTransaction(mBlockHeight, eBlockHash, tx, bs.ScanAddressFunc)
+				//释放
+				<-end
 
-		}(eblockHeight, eBlockHash, bs.extractingCH, eProducer)
-		//}
+			}(eblockHeight, eBlockHash,tx, bs.extractingCH, eProducer)
+		}
 	}
 
 	/*	开启导出的线程	*/
@@ -484,7 +483,7 @@ func (bs *NULSBlockScanner) extractRuntime(producer chan ExtractResult, worker c
 }
 
 //ExtractTransaction 提取交易单
-func (bs *NULSBlockScanner) ExtractTransaction(blockHeight uint64, blockHash string, txs []*Tx, scanAddressFunc openwallet.BlockScanAddressFunc) ExtractResult {
+func (bs *NULSBlockScanner) ExtractTransaction(blockHeight uint64, blockHash string, tx *Tx, scanAddressFunc openwallet.BlockScanAddressFunc) ExtractResult {
 
 	var (
 		result = ExtractResult{
@@ -500,9 +499,7 @@ func (bs *NULSBlockScanner) ExtractTransaction(blockHeight uint64, blockHash str
 
 	//bs.wm.Log.Debug("start extractTransaction")
 
-	for _, tx := range txs {
-		bs.extractTransaction(tx, blockHash, &result, scanAddressFunc)
-	}
+	bs.extractTransaction(tx, blockHash, &result, scanAddressFunc)
 	//bs.wm.Log.Debug("end extractTransaction")
 
 	return result
@@ -1088,9 +1085,7 @@ func (bs *NULSBlockScanner) ExtractTransactionData(txid string, scanTargetFunc o
 		return nil, fmt.Errorf("can't find the txid,err:" + err.Error())
 	}
 
-	txs := make([]*Tx,0)
-	txs = append(txs, tx)
-	result := bs.ExtractTransaction(0, "", txs, scanAddressFunc)
+	result := bs.ExtractTransaction(0, "", tx, scanAddressFunc)
 	if !result.Success {
 		return nil, fmt.Errorf("extract transaction failed")
 	}
