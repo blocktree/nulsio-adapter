@@ -404,7 +404,7 @@ func (bs *NULSBlockScanner) BatchExtractTransaction(blockHeight uint64, blockHas
 			//累计完成的线程数
 			done++
 			if done == shouldDone {
-			bs.wm.Log.Std.Info("done = %d, shouldDone = %d ", done, len(txs))
+			//bs.wm.Log.Std.Info("done = %d, shouldDone = %d ", done, len(txs))
 			close(quit) //关闭通道，等于给通道传入nil
 			}
 		}
@@ -414,7 +414,7 @@ func (bs *NULSBlockScanner) BatchExtractTransaction(blockHeight uint64, blockHas
 	extractWork := func(eblockHeight uint64, eBlockHash string, mTxs []*Tx, eProducer chan ExtractResult) {
 		for _, tx := range mTxs {
 			bs.extractingCH <- struct{}{}
-			shouldDone++
+			//done++
 			go func(mBlockHeight uint64, blockhash string,tx *Tx, end chan struct{}, mProducer chan<- ExtractResult) {
 
 				//导出提出的交易
