@@ -359,7 +359,6 @@ func (decoder *TransactionDecoder) CreateNrc20RawTransaction(wrapper openwallet.
 
 	}
 
-
 	if changeAmount.LessThan(decimal.Zero) {
 		return fmt.Errorf("[%s] balance is not enough", rawTx.Coin.Contract.Name)
 	}
@@ -623,8 +622,6 @@ func (decoder *TransactionDecoder) CreateTokenSummaryRawTransaction(wrapper open
 		}
 	}
 
-
-
 	if minTransfer.Cmp(retainedBalance) < 0 {
 		return nil, fmt.Errorf("mini transfer amount must be greater than address retained balance")
 	}
@@ -694,8 +691,8 @@ func (decoder *TransactionDecoder) CreateTokenSummaryRawTransaction(wrapper open
 					decoder.wm.Log.Std.Error(" fees support address have not enough money,from[%v] -> to[%v] ,supportFessAccount[%v],fixSupportAmount[%v] failed", addrBalance.Balance.Address, sumRawTx.SummaryAddress, supportFessAccount, fixSupportAmount)
 					continue
 				} else {
-					decoder.wm.Log.Debugf("send fee Amount: %v", fixSupportAmount)
-					decoder.wm.Log.Debugf("fees: %v", feeMain)
+					decoder.wm.Log.Info("send fee Amount: %v", fixSupportAmount)
+					decoder.wm.Log.Info("fees: %v", feeMain)
 
 					sumRawTx.Coin.IsContract = false
 					toMap[addrBalance.Balance.Address] = fixSupportAmount.Truncate(decoder.wm.Decimal()).String()
@@ -703,14 +700,16 @@ func (decoder *TransactionDecoder) CreateTokenSummaryRawTransaction(wrapper open
 					//最后一个,或者差1个到50
 					if len(toMap) == decoder.wm.Config.MaxTxInputs {
 						//创建一笔交易单
+						coinTemp := sumRawTx.Coin
+						coinTemp.IsContract = false
 						rawTx := &openwallet.RawTransaction{
-							Coin:     sumRawTx.Coin,
+							Coin:     coinTemp,
 							Account:  feesSupportAccount,
 							To:       toMap,
 							Required: 1,
 						}
 
-						createTxErr := decoder.CreateRawTransaction(
+						createTxErr := decoder.CreateSimpleRawTransaction(
 							wrapper,
 							rawTx)
 						rawTxWithErr := &openwallet.RawTransactionWithError{
@@ -735,10 +734,11 @@ func (decoder *TransactionDecoder) CreateTokenSummaryRawTransaction(wrapper open
 		decoder.wm.Log.Debugf("balance: %v", addrBalance.Balance.Balance)
 		decoder.wm.Log.Debugf("fees: %v", fee)
 		decoder.wm.Log.Debugf("sumAmount: %v", sumAmount)
-		sumRawTx.Coin.IsContract = true
+		coinTemp := sumRawTx.Coin
+		coinTemp.IsContract = true
 		//创建一笔交易单
 		rawTx := &openwallet.RawTransaction{
-			Coin:    sumRawTx.Coin,
+			Coin:    coinTemp,
 			Account: sumRawTx.Account,
 			To: map[string]string{
 				sumRawTx.SummaryAddress: sumAmount.StringFixed(int32(tokenDecimals)),
@@ -765,14 +765,16 @@ func (decoder *TransactionDecoder) CreateTokenSummaryRawTransaction(wrapper open
 
 		decoder.wm.Log.Debugf("have %v trans be send the fee", len(toMap))
 		//创建一笔交易单
+		coinTemp := sumRawTx.Coin
+		coinTemp.IsContract = false
 		rawTx := &openwallet.RawTransaction{
-			Coin:     sumRawTx.Coin,
+			Coin:     coinTemp,
 			Account:  feesSupportAccount,
 			To:       toMap,
 			Required: 1,
 		}
 
-		createTxErr := decoder.CreateRawTransaction(
+		createTxErr := decoder.CreateSimpleRawTransaction(
 			wrapper,
 			rawTx)
 		rawTxWithErr := &openwallet.RawTransactionWithError{

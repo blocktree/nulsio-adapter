@@ -180,10 +180,10 @@ func TestTransferNrc20(t *testing.T) {
 		//"NsdwWYFeyCiWi8gaK6igqJurjoY9TCqo",
 
 
-		//"Nse4CJKNJboQijoaXBTVr94ZtSkAvb4N",
-		//"Nse4e4z9w7sXcTmYWezZGSrBNdC5Fp3q",
-		//"Nse2cP94tauqzR6LmvXFsn8Bx5B4zitQ",
-		//"NsdvafMC4mvpYk6Srq9J2Z5AsGEJ7iF6",
+		"Nse4CJKNJboQijoaXBTVr94ZtSkAvb4N",
+		"Nse4e4z9w7sXcTmYWezZGSrBNdC5Fp3q",
+		"Nse2cP94tauqzR6LmvXFsn8Bx5B4zitQ",
+		"NsdvafMC4mvpYk6Srq9J2Z5AsGEJ7iF6",
 
 		//"Nse6cbCoZenQo7wwEFjs3th9MgNXcs2A",
 		//"Nse2aof9WeCoNiR86JfMfMCUmwc7vVQr",
@@ -194,7 +194,7 @@ func TestTransferNrc20(t *testing.T) {
 		//"Nse7fHdcBPcey6gFyWjhMKfZYLEAmAEj",
 		//"Nsdx573EYsEXRiwXXagTJdEbuFz9o1vg",
 		//"NsdybWu4R8TX46NEYwEfGoVwvf6tn5RM",
-		"Nse8SXiKiiEXiYdJ1dmAKJaAyS1TMwEV",
+		//"Nse8SXiKiiEXiYdJ1dmAKJaAyS1TMwEV",
 
 
 
