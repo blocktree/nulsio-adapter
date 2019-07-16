@@ -130,7 +130,7 @@ func TestTransfer(t *testing.T) {
 	tm := testInitWalletManager()
 	walletID := "VzLUoGiZioDZDyisPtKFMD7Sfy485Qih2N"
 	accountID := "HhMp9EJwZpNFhfUuSSXanocxgPGz9eLoSbPbqawcWtWU"
-	to := "Nse5A6LQwwJiioY6VQa9znMsc7eAzdnj"
+	to := "Nse5RvU2BgfrixogXxfjhr9ss46E8o6v"
 
 	//accountID := "4h4wnCmpzgy3ZTeoMHs3gjDCuWyXQcxDsk9dcwbNGhmR"
 	//to := "fiiimYt7qZekpQKZauBGxv8kGFJGdMyYtzSgdP"
@@ -140,7 +140,7 @@ func TestTransfer(t *testing.T) {
 
 
 
-	rawTx, err := testCreateTransactionStep(tm, walletID, accountID, to, "0.1", "", nil)
+	rawTx, err := testCreateTransactionStep(tm, walletID, accountID, to, "1", "", nil)
 	if err != nil {
 		return
 	}
@@ -180,10 +180,10 @@ func TestTransferNrc20(t *testing.T) {
 		//"NsdwWYFeyCiWi8gaK6igqJurjoY9TCqo",
 
 
-		"Nse4CJKNJboQijoaXBTVr94ZtSkAvb4N",
-		"Nse4e4z9w7sXcTmYWezZGSrBNdC5Fp3q",
-		"Nse2cP94tauqzR6LmvXFsn8Bx5B4zitQ",
-		"NsdvafMC4mvpYk6Srq9J2Z5AsGEJ7iF6",
+		//"Nse4CJKNJboQijoaXBTVr94ZtSkAvb4N",
+		//"Nse4e4z9w7sXcTmYWezZGSrBNdC5Fp3q",
+		//"Nse2cP94tauqzR6LmvXFsn8Bx5B4zitQ",
+		//"NsdvafMC4mvpYk6Srq9J2Z5AsGEJ7iF6",
 
 		//"Nse6cbCoZenQo7wwEFjs3th9MgNXcs2A",
 		//"Nse2aof9WeCoNiR86JfMfMCUmwc7vVQr",
@@ -194,7 +194,7 @@ func TestTransferNrc20(t *testing.T) {
 		//"Nse7fHdcBPcey6gFyWjhMKfZYLEAmAEj",
 		//"Nsdx573EYsEXRiwXXagTJdEbuFz9o1vg",
 		//"NsdybWu4R8TX46NEYwEfGoVwvf6tn5RM",
-		//"Nse8SXiKiiEXiYdJ1dmAKJaAyS1TMwEV",
+		"Nse8SXiKiiEXiYdJ1dmAKJaAyS1TMwEV",
 
 
 

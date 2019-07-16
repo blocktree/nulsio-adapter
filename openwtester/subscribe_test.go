@@ -83,6 +83,7 @@ func (sub *subscriberSingle) BlockExtractDataNotify(sourceKey string, data *open
 
 func TestGetTokenBlance(t *testing.T){
 	tm := testInitWalletManager()
+
 	for i:=0;i<100;i++{
 		walletID := "VzLUoGiZioDZDyisPtKFMD7Sfy485Qih2N"
 		accountID := "CbhEiN6Pm3ZjJDCkwybanzs192Mo32jhph2RY4ZLMAFN"
