@@ -58,6 +58,8 @@ type WalletConfig struct {
 
 	ChainId     string //链ID
 	MaxTxInputs int
+
+	DataDir string
 }
 
 func NewConfig(symbol string) *WalletConfig {
@@ -85,4 +87,18 @@ func NewConfig(symbol string) *WalletConfig {
 	file.MkdirAll(c.dbPath)
 
 	return &c
+}
+
+func (wc *WalletConfig) makeDataDir() {
+
+	if len(wc.DataDir) == 0 {
+		//默认路径当前文件夹./data
+		wc.DataDir = "data"
+	}
+
+	//本地数据库文件路径
+	wc.dbPath = filepath.Join(wc.DataDir, strings.ToLower(wc.Symbol), "db")
+
+	//创建目录
+	file.MkdirAll(wc.dbPath)
 }
