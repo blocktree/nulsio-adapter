@@ -59,52 +59,15 @@ func CreateEmptyRawTransaction(vins []Vin, vouts []Vout, remark string, lockTime
 	return hex.EncodeToString(txBytes), result, nil
 }
 
-func SignTransactionMessage(message string, prikey []byte) ([]byte, error) {
+func SignTransactionMessage(message []byte, prikey []byte) ([]byte, error) {
 
-	if len(message) == 0 {
-		return nil, errors.New("No message to sign!")
-	}
-	//fmt.Println("trc", message)
-
-	if prikey == nil || len(prikey) != 32 {
-		return nil, errors.New("Invalid private key!")
-	}
-
-	data, err := hex.DecodeString(message)
-	if err != nil {
-		return nil, errors.New("Invalid message to sign!")
-	}
-
-	data = Sha256Twice(data) //sha256
-
-	signature, retCode := owcrypt.Signature(prikey, nil, 0, data, 32, owcrypt.ECC_CURVE_SECP256K1)
+	signature, retCode := owcrypt.Signature(prikey, nil, 0, message, 32, owcrypt.ECC_CURVE_SECP256K1)
 	if retCode != owcrypt.SUCCESS {
 		return nil, errors.New("Failed to sign message!")
 	}
 
-	pub, ret := owcrypt.GenPubkey(prikey, owcrypt.ECC_CURVE_SECP256K1)
-	if ret != owcrypt.SUCCESS {
-		return nil, errors.New("Get Pubkey failed!")
-	}
-	pub = owcrypt.PointCompress(pub, owcrypt.ECC_CURVE_SECP256K1)
+	return signature,nil
 
-	sigPub := &SigPub{
-		pub,
-		signature,
-	}
-
-
-	result := make([]byte, 0)
-	result = append(result, byte(len(pub)))
-	result = append(result, pub...)
-
-	result = append(result, 0)
-	resultSig := make([]byte, 0)
-	resultSig = append(resultSig, sigPub.ToBytes()...)
-
-	result = append(result, resultSig...)
-
-	return result, nil
 }
 
 type SigPub struct {

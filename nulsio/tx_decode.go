@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"github.com/blocktree/go-owcrypt"
 	"github.com/blocktree/nulsio-adapter/nulsio_trans"
 	"github.com/blocktree/openwallet/common"
 	"github.com/blocktree/openwallet/openwallet"
@@ -811,11 +812,10 @@ func (decoder *TransactionDecoder) SignRawTransaction(wrapper openwallet.WalletD
 
 			childKey, err := key.DerivedKeyWithPath(keySignature.Address.HDPath, keySignature.EccType)
 			keyBytes, err := childKey.GetPrivateKeyBytes()
+			txHash,err := hex.DecodeString(keySignature.Message)
 			if err != nil {
 				return err
 			}
-
-			txHash := keySignature.Message
 
 			//签名交易
 			/////////交易单哈希签名
@@ -830,11 +830,9 @@ func (decoder *TransactionDecoder) SignRawTransaction(wrapper openwallet.WalletD
 		}
 	}
 
-	decoder.wm.Log.Info("transaction hash sign success")
 
 	rawTx.Signatures[rawTx.Account.AccountID] = keySignatures
 
-	//decoder.wm.Log.Info("rawTx.Signatures 1:", rawTx.Signatures)
 
 	return nil
 }
@@ -842,10 +840,6 @@ func (decoder *TransactionDecoder) SignRawTransaction(wrapper openwallet.WalletD
 //VerifyRawTransaction 验证交易单，验证交易单并返回加入签名后的交易单
 func (decoder *TransactionDecoder) VerifyRawTransaction(wrapper openwallet.WalletDAI, rawTx *openwallet.RawTransaction) error {
 
-	var (
-	//sigPub = make([]fiiiTransaction.SigPub, 0)
-	//txUnlocks = make([]string, 0)
-	)
 
 	rawHex, err := hex.DecodeString(rawTx.RawHex)
 	if err != nil {
@@ -864,10 +858,27 @@ func (decoder *TransactionDecoder) VerifyRawTransaction(wrapper openwallet.Walle
 		for _, keySignature := range keySignatures {
 
 			signature, _ := hex.DecodeString(keySignature.Signature)
-			//pubkey, _ := hex.DecodeString(keySignature.Address.PublicKey)
-			sigPubByte = append(sigPubByte, signature...)
-			//decoder.wm.Log.Debug("Signature:", keySignature.Signature)
-			//decoder.wm.Log.Debug("PublicKey:", keySignature.Address.PublicKey)
+			pub,_ := hex.DecodeString(keySignature.Address.PublicKey)
+			pub = owcrypt.PointCompress(pub, owcrypt.ECC_CURVE_SECP256K1)
+
+			sigPub := &nulsio_trans.SigPub{
+				pub,
+				signature,
+			}
+
+
+			result := make([]byte, 0)
+			result = append(result, byte(len(pub)))
+			result = append(result, pub...)
+
+			result = append(result, 0)
+			resultSig := make([]byte, 0)
+			resultSig = append(resultSig, sigPub.ToBytes()...)
+
+			result = append(result, resultSig...)
+
+
+			sigPubByte = append(sigPubByte, result...)
 		}
 	}
 
@@ -875,22 +886,9 @@ func (decoder *TransactionDecoder) VerifyRawTransaction(wrapper openwallet.Walle
 
 	rawBytes := make([]byte, 0)
 	rawBytes = append(rawBytes, rawHex...)
-	//rawBytes = append(rawBytes, 0)
 	rawBytes = append(rawBytes, sigPubByte...)
 	rawTx.IsCompleted = true
 	rawTx.RawHex = hex.EncodeToString(rawBytes)
-
-	/////////验证交易单
-	//验证时，对于公钥哈希地址，需要将对应的锁定脚本传入TxUnlock结构体
-	//pass, signedTrans, err := fiiiTransaction.VerifyAndCombineTransaction(emptyTrans, sigPub)
-	//if pass {
-	//	decoder.wm.Log.Debug("transaction verify passed")
-	//	rawTx.IsCompleted = true
-	//	rawTx.RawHex = base64.StdEncoding.EncodeToString([]byte(signedTrans))
-	//} else {
-	//	decoder.wm.Log.Errorf("transaction verify failed, unexpected error: %v", err)
-	//	rawTx.IsCompleted = false
-	//}
 
 	_, err = decoder.wm.Api.VaildTransaction(rawTx.RawHex)
 	if err != nil {
@@ -1191,6 +1189,13 @@ func (decoder *TransactionDecoder) createSimpleNrc20RawTransaction(
 	for i, _ := range addressMap {
 
 		beSignHex := signTrans
+		beSignHexHex, err := hex.DecodeString(beSignHex)
+		if err != nil {
+			return err
+		}
+
+		beSignHexHex = nulsio_trans.Sha256Twice(beSignHexHex) //sha256
+
 
 		addr, err := wrapper.GetAddress(i)
 		if err != nil {
@@ -1201,7 +1206,7 @@ func (decoder *TransactionDecoder) createSimpleNrc20RawTransaction(
 			EccType: decoder.wm.Config.CurveType,
 			Nonce:   "",
 			Address: addr,
-			Message: beSignHex,
+			Message: hex.EncodeToString(beSignHexHex),
 		}
 
 		keySigs = append(keySigs, &signature)

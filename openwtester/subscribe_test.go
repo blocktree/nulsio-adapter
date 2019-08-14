@@ -120,6 +120,8 @@ func TestSubscribeAddress(t *testing.T) {
 			"Nsdx573EYsEXRiwXXagTJdEbuFz9o1vg":"Nsdx573EYsEXRiwXXagTJdEbuFz9o1vg",
 			"NsdybWu4R8TX46NEYwEfGoVwvf6tn5RM":"NsdybWu4R8TX46NEYwEfGoVwvf6tn5RM",
 			"Nse8SXiKiiEXiYdJ1dmAKJaAyS1TMwEV":"Nse8SXiKiiEXiYdJ1dmAKJaAyS1TMwEV",
+			"Nse4CJKNJboQijoaXBTVr94ZtSkAvb4N":"Nse4CJKNJboQijoaXBTVr94ZtSkAvb4N",
+			"Nse5VJW4vNDyJXkcMmCTHRD9QQC5T1WS":"Nse5VJW4vNDyJXkcMmCTHRD9QQC5T1WS",
 		}
 	)
 
@@ -161,7 +163,7 @@ func TestSubscribeAddress(t *testing.T) {
 
 	//log.Debug("already got scanner:", assetsMgr)
 	scanner := assetsMgr.GetBlockScanner()
-	scanner.SetRescanBlockHeight(3166839)
+	scanner.SetRescanBlockHeight(3184990)
 
 	if scanner == nil {
 		log.Error(symbol, "is not support block scan")
@@ -196,6 +198,7 @@ func TestSubscribeScanBlock(t *testing.T) {
 			"Nsdx573EYsEXRiwXXagTJdEbuFz9o1vg":"Nsdx573EYsEXRiwXXagTJdEbuFz9o1vg",
 			"NsdybWu4R8TX46NEYwEfGoVwvf6tn5RM":"NsdybWu4R8TX46NEYwEfGoVwvf6tn5RM",
 			"Nse8SXiKiiEXiYdJ1dmAKJaAyS1TMwEV":"Nse8SXiKiiEXiYdJ1dmAKJaAyS1TMwEV",
+			"Nse4CJKNJboQijoaXBTVr94ZtSkAvb4N":"Nse4CJKNJboQijoaXBTVr94ZtSkAvb4N",
 		}
 	)
 
@@ -240,7 +243,7 @@ func TestSubscribeScanBlock(t *testing.T) {
 	sub := subscriberSingle{}
 	scanner.AddObserver(&sub)
 
-	scanner.ScanBlock(3166839)
+	scanner.ScanBlock(3184990)
 
 	time.Sleep(5*time.Second)
 }
